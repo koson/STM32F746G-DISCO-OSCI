@@ -1,0 +1,12 @@
+@startuml
+start
+    if(unit == USB_DISK_UNIT) then (yes)
+        :fs = &USBDISK_FatFs
+        tot_sect = (fs->n_fatent - 2) * fs->csize;
+    elseif (unit == SD_DISK_UNIT) then (yes)
+        :fs = &SDDISK_FatFs
+        tot_sect = (fs->n_fatent - 2) * fs->csize;
+    endif
+    :return (tot_sect);
+stop
+@endum 

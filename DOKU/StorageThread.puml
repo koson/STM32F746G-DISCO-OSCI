@@ -1,0 +1,24 @@
+@startuml
+
+start
+
+:event = osMessageGet( StorageEvent, osWaitForever );
+    if( event.status == osEventMessage ) then (yes)
+    
+        switch(event.value.v)
+            case (USBDISK_CONNECTION_EVENT)
+                :f_mount(&USBDISK_FatFs,USBDISK_Drive,  0)
+                StorageStatus[USB_DISK_UNIT] = 1;
+            case (USBDISK_DISCONNECTION_EVENT)
+                :f_mount(0, USBDISK_Drive, 0)
+                StorageStatus[USB_DISK_UNIT] = 0;
+            case (SDDISK_INSERT_EVENT)
+                :f_mount(&SDDISK_FatFs,SDDISK_Drive,  0)
+                StorageStatus[SD_DISK_UNIT] = 1;
+            case (SDDISK_REMOVE_EVENT)
+                :f_mount(0, SDDISK_Drive, 0)
+                StorageStatus[SD_DISK_UNIT] = 0;
+        endswitch
+    endif
+stop
+@endum 
